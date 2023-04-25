@@ -1,0 +1,42 @@
+{
+  "name": "social-media-api",
+  "version": "0.1.0",
+  "description": "a minimal social media backend API",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/d02ev/social-media-api.git"
+  },
+  "keywords": [
+    "social-media",
+    "express",
+    "postgresql",
+    "sql",
+    "jwt",
+    "auth",
+    "docker"
+  ],
+  "author": "Vikramaditya Pratap Singh",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/d02ev/social-media-api/issues"
+  },
+  "homepage": "https://github.com/d02ev/social-media-api#readme",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "http-errors": "^2.0.0",
+    "jsonwebtoken": "^9.0.0",
+    "pg": "^8.10.0",
+    "pg-hstore": "^2.3.4",
+    "sequelize": "^6.31.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.22",
+    "sequelize-cli": "^6.6.0"
+  }
+}
