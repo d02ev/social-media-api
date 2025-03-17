@@ -1,0 +1,108 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(uuid()) @map("id") @db.Uuid
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  fullname String   @map("fullname")
+  dob      DateTime @map("dob") @db.Date
+  gender   Int      @map("gender") // 0 -> F, 1 -> M
+  email    String   @unique @map("email")
+  username String   @unique @map("username")
+
+  credential Credential?
+  followings Connection[] @relation("following")
+  followers  Connection[] @relation("followers")
+  posts      Post[]       @relation("post_author")
+  comments   Comment[]    @relation("comment_author")
+  reaction   Reaction?    @relation("reactor")
+
+  @@index([email])
+  @@index([username])
+  @@map("users")
+}
+
+model Credential {
+  id        String   @id @default(uuid()) @map("id") @db.Uuid
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  passwordHash String @unique @map("password_hash")
+  refreshToken String @unique @map("refresh_token")
+
+  user   User   @relation(references: [id], fields: [userId])
+  userId String @unique @map("user_id") @db.Uuid
+
+  @@index([passwordHash])
+  @@index([refreshToken])
+  @@index([userId])
+  @@map("credentials")
+}
+
+model Connection {
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  following       User   @relation(references: [id], fields: [followingUserId], name: "following")
+  followingUserId String @unique @map("following_user_id") @db.Uuid
+
+  followers      User   @relation(references: [id], fields: [followedUserId], name: "followers")
+  followedUserId String @unique @map("followed_user_id") @db.Uuid
+
+  @@id([followedUserId, followingUserId])
+  @@map("connections")
+}
+
+model Post {
+  id        String   @id @default(uuid()) @map("id") @db.Uuid
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  title       String @map("title")
+  description String @map("description") @db.Text
+
+  author   User   @relation(references: [id], fields: [authorId], name: "post_author")
+  authorId String @unique @map("author_id") @db.Uuid
+
+  comments  Comment[]  @relation("comment_on_post")
+  reactions Reaction[] @relation("post_reaction")
+
+  @@index([authorId])
+  @@map("posts")
+}
+
+model Comment {
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  commentAuthor   User   @relation(references: [id], fields: [commentAuthorId], name: "comment_author")
+  commentAuthorId String @unique @map("comment_author_id") @db.Uuid
+
+  post   Post   @relation(references: [id], fields: [postId], name: "comment_on_post")
+  postId String @unique @map("post_id") @db.Uuid
+
+  @@id([commentAuthorId, postId])
+  @@map("comments")
+}
+
+model Reaction {
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  reactor   User   @relation(references: [id], fields: [reactorId], name: "reactor")
+  reactorId String @unique @map("reactor_id") @db.Uuid
+
+  post   Post   @relation(references: [id], fields: [postId], name: "post_reaction")
+  postId String @unique @map("post_id") @db.Uuid
+
+  @@id([reactorId, postId])
+  @@map("reactions")
+}
