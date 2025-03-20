@@ -26,16 +26,16 @@
   "main": "server.js",
   "scripts": {
     "build": "rimraf dist && babel src -d dist",
-    "start:dev": "dotenv -e .env.development -- nodemon --exec babel-node src/server.js",
-    "start:prod": "npm run build && dotenv -e .env.production -- node dist/server.js",
-    "start:test": "npm run build && dotenv -e .env.test -- node dist/server.js",
+    "start:dev": "dotenv -e src/configs/env/.env.development -- nodemon --exec babel-node src/server.js",
+    "start:prod": "npm run build && dotenv -e src/configs/env/.env.production -- node dist/server.js",
+    "start:test": "npm run build && dotenv -e src/configs/env/.env.test -- node dist/server.js",
     "lint:fix": "npx eslint --fix",
     "lint:check": "npx eslint",
     "format:write": "npx prettier --write \"src/**/*.js\"",
     "format:check": "npx prettier --check \"src/**/*.js\"",
-    "migrate:dev": "dotenv -e .env.development -- npx prisma migrate dev",
-    "migrate:prod": "dotenv -e .env.production -- npx prisma migrate deploy",
-    "studio:dev": "dotenv -e .env.development -- npx prisma studio"
+    "migrate:dev": "dotenv -e src/configs/env/.env.development -- npx prisma migrate dev",
+    "migrate:prod": "dotenv -e src/configs/env/.env.production -- npx prisma migrate deploy",
+    "studio:dev": "dotenv -e src/configs/env/.env.development -- npx prisma studio"
   },
   "dependencies": {
     "@prisma/client": "^6.5.0",
@@ -45,6 +45,7 @@
     "dotenv": "^16.4.7",
     "dotenv-cli": "^8.0.0",
     "express": "^4.21.2",
+    "express-validator": "^7.2.1",
     "jsonwebtoken": "^9.0.2",
     "rimraf": "^6.0.1",
     "winston": "^3.17.0"

@@ -2,10 +2,10 @@ import {
 	PrismaClientKnownRequestError,
 	PrismaClientUnknownRequestError,
 } from "@prisma/client/runtime/library";
-import BadRequestError from "../error/bad-request.error";
-import InternalServerError from "../error/internal-server.error";
+import BadRequestError from "../errors/bad-request.error";
+import InternalServerError from "../errors/internal-server.error";
 import logger from "../util/logger.util";
-import NotFoundError from "../error/not-found.error";
+import NotFoundError from "../errors/not-found.error";
 
 const logInternalUnknownError = err => {
 	const stackLines = err.stack ? err.stack.split("\n") : [];
