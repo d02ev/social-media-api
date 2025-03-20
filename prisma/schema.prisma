@@ -19,7 +19,7 @@ model User {
   username String   @unique @map("username")
 
   credential Credential?
-  followings Connection[] @relation("following")
+  followings Connection[] @relation("followings")
   followers  Connection[] @relation("followers")
   posts      Post[]       @relation("post_author")
   comments   Comment[]    @relation("comment_author")
@@ -51,13 +51,13 @@ model Connection {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  following       User   @relation(references: [id], fields: [followingUserId], name: "following")
+  following       User   @relation(references: [id], fields: [followingUserId], name: "followings")
   followingUserId String @unique @map("following_user_id") @db.Uuid
 
-  followers      User   @relation(references: [id], fields: [followedUserId], name: "followers")
-  followedUserId String @unique @map("followed_user_id") @db.Uuid
+  followers      User   @relation(references: [id], fields: [followerUserId], name: "followers")
+  followerUserId String @unique @map("follower_user_id") @db.Uuid
 
-  @@id([followedUserId, followingUserId])
+  @@id([followerUserId, followingUserId])
   @@map("connections")
 }
 

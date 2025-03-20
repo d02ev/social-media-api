@@ -7,7 +7,7 @@ import eslintConfigPrettier from "eslint-config-prettier";
 export default [
   {
     files: ["src/**/*.js"],
-    ignores: ["dist/", "node_modules/", ".env.*", "eslint.config.mjs", "prettier.config.mjs", "*.json", ".sequelizerc"],
+    ignores: ["dist/", "node_modules/", ".env.*", "eslint.config.mjs", "prettier.config.mjs", "*.json", "prisma/"],
     languageOptions: {
       parserOptions: {
         ecmaVersion: "latest",

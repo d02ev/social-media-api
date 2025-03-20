@@ -3,5 +3,5 @@ node_modules/
 .env.*
 eslint.config.mjs
 prettier.config.mjs
-.sequelizerc
+prisma/
 *.json

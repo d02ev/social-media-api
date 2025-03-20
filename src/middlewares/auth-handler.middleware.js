@@ -15,8 +15,8 @@ const authHandler = (req, res, next) => {
 		const decoded = decodeAccessToken(token);
 		req.user = decoded;
 		next();
+	// eslint-disable-next-line no-unused-vars
 	} catch (err) {
-		// eslint-disable-next-line no-unused-vars
 		return res.status(401).json({
 			statusCode: 401,
 			message: "Invalid token",
