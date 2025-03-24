@@ -4,13 +4,13 @@ import UnfollowUserResponse from "../dtos/unfollow-user-response.dto";
 import BadRequestError from "../errors/bad-request.error";
 import InternalServerError from "../errors/internal-server.error";
 
-export const followUser = async (userLoggedInId, userToFollowId) => {
+export const followUser = async (followerId, followingId) => {
   // check if the logged in user already follows the given user
   const alreadyFollows = await prismaClient.connection.findUnique({
     where: {
-      followedUserId_followingUserId: {
-        followingUserId: userToFollowId,
-        followedUserId: userLoggedInId,
+      followerUserId_followingUserId: {
+        followerUserId: followerId,
+        followingUserId: followingId
       }
     }
   });
@@ -20,8 +20,8 @@ export const followUser = async (userLoggedInId, userToFollowId) => {
 
   const createFollowing = await prismaClient.connection.create({
     data: {
-      followingUserId: userToFollowId,
-      followedUserId: userLoggedInId,
+      followingUserId: followingId,
+      followerUserId: followerId,
     }
   });
   if (!createFollowing) {
@@ -30,7 +30,7 @@ export const followUser = async (userLoggedInId, userToFollowId) => {
 
   // fetch the username of the user to be followed
   const userToFollowUsername = await prismaClient.user.findUnique({
-    where: { id: userToFollowId },
+    where: { id: followingId },
     select: {
       username: true
     }
@@ -42,13 +42,13 @@ export const followUser = async (userLoggedInId, userToFollowId) => {
   return new FollowUserResponse(userToFollowUsername.username);
 };
 
-export const unfollowUser = async (userLoggedInId, userToUnfollowId) => {
+export const unfollowUser = async (followerId, followingId) => {
   // check if the user follows the given user
   const doesFollow = await prismaClient.connection.findUnique({
     where: {
       followedUserId_followingUserId: {
-        followingUserId: userToUnfollowId,
-        followedUserId: userLoggedInId,
+        followingUserId: followingId,
+        followerUserId: followerId,
       }
     }
   });
@@ -59,8 +59,8 @@ export const unfollowUser = async (userLoggedInId, userToUnfollowId) => {
   const removeFollowing = await prismaClient.connection.delete({
     where: {
       followedUserId_followingUserId: {
-        followingUserId: userToUnfollowId,
-        followedUserId: userLoggedInId,
+        followingUserId: followingId,
+        followerUserId: followerId,
       }
     }
   });
@@ -69,7 +69,7 @@ export const unfollowUser = async (userLoggedInId, userToUnfollowId) => {
   }
 
   const userToUnfollowUsername = await prismaClient.user.findUnique({
-    where: { id: userToUnfollowId },
+    where: { id: followingId },
     select: {
       username: true,
     }

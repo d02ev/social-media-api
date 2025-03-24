@@ -19,11 +19,11 @@ model User {
   username String   @unique @map("username")
 
   credential Credential?
-  followings Connection[] @relation("followings")
-  followers  Connection[] @relation("followers")
+  followings Connection[] @relation("followers")
+  followers  Connection[] @relation("followings")
   posts      Post[]       @relation("post_author")
   comments   Comment[]    @relation("comment_author")
-  reaction   Reaction?    @relation("reactor")
+  reactions   Reaction[]    @relation("reactor")
 
   @@index([email])
   @@index([username])
@@ -86,6 +86,8 @@ model Comment {
   commentAuthor   User   @relation(references: [id], fields: [commentAuthorId], name: "comment_author")
   commentAuthorId String @unique @map("comment_author_id") @db.Uuid
 
+  comment String @map("comment") @db.Text
+
   post   Post   @relation(references: [id], fields: [postId], name: "comment_on_post")
   postId String @unique @map("post_id") @db.Uuid
 
@@ -99,6 +101,8 @@ model Reaction {
 
   reactor   User   @relation(references: [id], fields: [reactorId], name: "reactor")
   reactorId String @unique @map("reactor_id") @db.Uuid
+
+  reaction Int @map("reaction") @db.Integer @default(0) // 1 -> like, -1 -> dislike
 
   post   Post   @relation(references: [id], fields: [postId], name: "post_reaction")
   postId String @unique @map("post_id") @db.Uuid
